@@ -1,0 +1,48 @@
+import type { Category, Difficulty } from './types'
+
+export const QUESTION_SECONDS = 35
+const POINTS: Record<Difficulty, number> = { easy: 1, medium: 2, hard: 3 }
+
+export interface RunRecord {
+  correct: boolean
+  category: Category
+  difficulty: Difficulty
+  remaining: number // seconds left when answered
+}
+
+export function rawScore(records: { correct: boolean; difficulty: Difficulty; remaining: number }[]): number {
+  return records.reduce((sum, r) => {
+    if (!r.correct) return sum
+    const bonus = 0.5 * Math.max(0, Math.min(1, r.remaining / QUESTION_SECONDS))
+    return sum + POINTS[r.difficulty] + bonus
+  }, 0)
+}
+
+export function maxRaw(records: { difficulty: Difficulty }[]): number {
+  return records.reduce((sum, r) => sum + POINTS[r.difficulty] + 0.5, 0)
+}
+
+export function toIQ(raw: number, max: number): number {
+  const iq = 70 + 75 * (raw / max)
+  return Math.round(Math.min(145, Math.max(70, iq)))
+}
+
+// Standard normal CDF via Abramowitz–Stegun erf approximation (|error| < 1.5e-7)
+export function percentile(iq: number): number {
+  const z = (iq - 100) / 15
+  const x = Math.abs(z) / Math.SQRT2
+  const t = 1 / (1 + 0.3275911 * x)
+  const poly = ((((1.061405429 * t - 1.453152027) * t + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t
+  const erf = 1 - poly * Math.exp(-x * x)
+  const cdf = 0.5 * (1 + Math.sign(z) * erf)
+  return Math.round(cdf * 100)
+}
+
+export interface Title { name: string; emoji: string }
+export function titleFor(iq: number): Title {
+  if (iq >= 130) return { name: 'Pattern Prodigy', emoji: '🧬' }
+  if (iq >= 115) return { name: 'Logic Llama', emoji: '🦙' }
+  if (iq >= 100) return { name: 'Puzzle Pathfinder', emoji: '🧭' }
+  if (iq >= 85) return { name: 'Curious Cadet', emoji: '🚀' }
+  return { name: 'Rogue Variable', emoji: '🎲' }
+}

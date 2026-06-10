@@ -3,7 +3,11 @@
   let { remaining = $bindable(QUESTION_SECONDS), epoch = 0 }: { remaining?: number; epoch?: number } = $props()
   $effect(() => {
     void epoch // restart interval each question
-    const t = setInterval(() => { remaining = Math.max(0, Math.round((remaining - 0.1) * 10) / 10) }, 100)
+    const start = Date.now()
+    const full = QUESTION_SECONDS
+    const t = setInterval(() => {
+      remaining = Math.max(0, full - (Date.now() - start) / 1000)
+    }, 100)
     return () => clearInterval(t)
   })
   const R = 15

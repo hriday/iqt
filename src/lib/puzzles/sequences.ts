@@ -178,22 +178,25 @@ export const SEQUENCES: Puzzle[] = [
   },
 
   // ── seq-m4 ───────────────────────────────────────────────────────────────
-  // Rule: shape cycles cross → star → hexagon while rotation advances +90° per
-  // step: cross 0, star 90, hexagon 180, cross 270 → next = star 360 ≡ 0.
+  // Rule: shape cycles arrow → L → flag while rotation advances +90° per step:
+  // arrow 0, L 90, flag 180, arrow 270 → next = L 360 ≡ 0. All three shapes
+  // are rotation-asymmetric, so the +90° rule is visible on every shown cell
+  // (the earlier cross/star/hexagon design hid it: cross is 90°-symmetric and
+  // hexagon 180°-symmetric).
   {
     kind: 'sequence',
     id: 'seq-m4',
     category: 'sequences',
     difficulty: 'medium',
     sequence: [
-      g('cross', { rotation: 0 }), g('star', { rotation: 90 }),
-      g('hexagon', { rotation: 180 }), g('cross', { rotation: 270 }),
+      g('arrow', { rotation: 0 }), g('L', { rotation: 90 }),
+      g('flag', { rotation: 180 }), g('arrow', { rotation: 270 }),
     ],
     options: [
-      g('star', { rotation: 0 }),     // correct (360 ≡ 0)
-      g('hexagon', { rotation: 90 }), // one step too far
-      g('cross', { rotation: 270 }),  // one step back (copy of shown cell)
-      g('star', { rotation: 90 }),    // right shape, wrong-rotation twin (copy of shown cell)
+      g('L', { rotation: 0 }),               // correct (360 ≡ 0)
+      g('L', { rotation: 90 }),              // right shape, wrong-rotation twin (copy of shown cell)
+      g('L', { rotation: 0, mirror: true }), // right shape & rotation, mirrored
+      g('flag', { rotation: 0 }),            // wrong shape in cycle, right rotation
     ],
     correct: 0,
   },
@@ -262,24 +265,25 @@ export const SEQUENCES: Puzzle[] = [
 
   // ── seq-h3 ───────────────────────────────────────────────────────────────
   // Rule: outer pentagon outline shrinks −0.15/step (0.9, 0.75, 0.6, 0.45)
-  // while inner dot count grows +1/step (1, 2, 3, 4); dots stay at scale 0.4.
-  // Next = [pentagon outline 0.3, 5 dots].
+  // while inner dot count grows +1/step (1, 2, 3, 4); dots stay at scale 0.25
+  // (small enough that even the 5-dot layout's corner dots stay inside the
+  // pentagon at its smallest scale 0.3). Next = [pentagon outline 0.3, 5 dots].
   {
     kind: 'sequence',
     id: 'seq-h3',
     category: 'sequences',
     difficulty: 'hard',
     sequence: [
-      [{ shape: 'pentagon', fill: 'outline', scale: 0.9 }, { shape: 'dot', count: 1, scale: 0.4 }],
-      [{ shape: 'pentagon', fill: 'outline', scale: 0.75 }, { shape: 'dot', count: 2, scale: 0.4 }],
-      [{ shape: 'pentagon', fill: 'outline', scale: 0.6 }, { shape: 'dot', count: 3, scale: 0.4 }],
-      [{ shape: 'pentagon', fill: 'outline', scale: 0.45 }, { shape: 'dot', count: 4, scale: 0.4 }],
+      [{ shape: 'pentagon', fill: 'outline', scale: 0.9 }, { shape: 'dot', count: 1, scale: 0.25 }],
+      [{ shape: 'pentagon', fill: 'outline', scale: 0.75 }, { shape: 'dot', count: 2, scale: 0.25 }],
+      [{ shape: 'pentagon', fill: 'outline', scale: 0.6 }, { shape: 'dot', count: 3, scale: 0.25 }],
+      [{ shape: 'pentagon', fill: 'outline', scale: 0.45 }, { shape: 'dot', count: 4, scale: 0.25 }],
     ],
     options: [
-      [{ shape: 'pentagon', fill: 'outline', scale: 0.3 }, { shape: 'dot', count: 5, scale: 0.4 }],  // correct
-      [{ shape: 'pentagon', fill: 'outline', scale: 0.3 }, { shape: 'dot', count: 4, scale: 0.4 }],  // pentagon right, dots one step back
-      [{ shape: 'pentagon', fill: 'outline', scale: 0.45 }, { shape: 'dot', count: 5, scale: 0.4 }], // dots right, pentagon one step back
-      [{ shape: 'pentagon', fill: 'outline', scale: 0.45 }, { shape: 'dot', count: 4, scale: 0.4 }], // both one step back (copy of shown cell)
+      [{ shape: 'pentagon', fill: 'outline', scale: 0.3 }, { shape: 'dot', count: 5, scale: 0.25 }],  // correct
+      [{ shape: 'pentagon', fill: 'outline', scale: 0.3 }, { shape: 'dot', count: 4, scale: 0.25 }],  // pentagon right, dots one step back
+      [{ shape: 'pentagon', fill: 'outline', scale: 0.45 }, { shape: 'dot', count: 5, scale: 0.25 }], // dots right, pentagon one step back
+      [{ shape: 'pentagon', fill: 'outline', scale: 0.45 }, { shape: 'dot', count: 4, scale: 0.25 }], // both one step back (copy of shown cell)
     ],
     correct: 0,
   },

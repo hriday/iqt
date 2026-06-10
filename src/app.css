@@ -1,0 +1,21 @@
+:root {
+  --bg: #0b0f1a; --panel: #111827; --border: #1f2a44; --border2: #243355;
+  --cell: #0d1320; --text: #e2e8f0; --muted: #64748b; --dim: #94a3b8;
+  --ink: #7dd3fc; --accent: #22d3ee; --accent2: #818cf8; --glow: rgba(34, 211, 238, 0.45);
+  --mono: 'SF Mono', 'Fira Code', Menlo, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; min-height: 100vh; background: var(--bg); color: var(--text);
+  font-family: var(--mono); display: flex; justify-content: center;
+}
+#app { width: 100%; max-width: 560px; padding: 24px 16px; }
+.label { font-size: 11px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; }
+button {
+  font-family: var(--mono); cursor: pointer; border-radius: 8px;
+  border: 1px solid var(--border2); background: var(--cell); color: var(--dim);
+}
+button.primary {
+  border-color: var(--accent); background: rgba(34, 211, 238, 0.08); color: var(--accent);
+}
+button.primary:hover { box-shadow: 0 0 12px var(--glow); }

@@ -2,11 +2,6 @@ import type { Puzzle, Cell, Glyph, Shape } from '../types'
 
 const g = (shape: Shape, rest: Partial<Glyph> = {}): Cell => [{ shape, ...rest }]
 
-// Note on odd-one-out puzzles whose four "same" items look identical
-// (spa-e1/e2/e4/e5): the pool test requires every option to serialize
-// uniquely, so the lookalikes spell out renderer defaults explicitly
-// (fill 'solid', rotation 0, scale 1) — distinct JSON, identical pixels.
-//
 // Note on rotation puzzles: only L and flag are chiral (their mirror image
 // equals no rotation of the original — see SHAPE_PATHS), so a mirrored
 // distractor at ANY rotation can never collide with a pure rotation of the
@@ -23,10 +18,10 @@ export const SPATIAL: Puzzle[] = [
     difficulty: 'easy',
     options: [
       g('circle'),
-      g('circle', { fill: 'solid' }),
+      g('circle'),
       g('square'),                     // odd: different shape
-      g('circle', { rotation: 0 }),
-      g('circle', { scale: 1 }),
+      g('circle'),
+      g('circle'),
     ],
     correct: 2,
   },
@@ -39,11 +34,11 @@ export const SPATIAL: Puzzle[] = [
     category: 'spatial',
     difficulty: 'easy',
     options: [
-      g('star', { fill: 'solid' }),
+      g('star'),
       g('star', { fill: 'outline' }),  // odd: only outline
       g('star'),
-      g('star', { fill: 'solid', rotation: 0 }),
-      g('star', { fill: 'solid', scale: 1 }),
+      g('star'),
+      g('star'),
     ],
     correct: 1,
   },
@@ -76,10 +71,10 @@ export const SPATIAL: Puzzle[] = [
     difficulty: 'easy',
     options: [
       g('diamond', { scale: 0.6 }),
-      g('diamond', { fill: 'solid', scale: 0.6 }),
-      g('diamond', { scale: 0.6, rotation: 0 }),
+      g('diamond', { scale: 0.6 }),
+      g('diamond', { scale: 0.6 }),
       g('diamond', { scale: 1 }),              // odd: full size
-      g('diamond', { fill: 'solid', scale: 0.6, rotation: 0 }),
+      g('diamond', { scale: 0.6 }),
     ],
     correct: 3,
   },
@@ -94,10 +89,10 @@ export const SPATIAL: Puzzle[] = [
     difficulty: 'easy',
     options: [
       g('dot', { count: 3 }),
-      g('dot', { count: 3, scale: 1 }),
+      g('dot', { count: 3 }),
       g('dot', { count: 4 }),              // odd: one dot more
-      g('dot', { count: 3, rotation: 0 }),
-      g('dot', { count: 3, scale: 1, rotation: 0 }),
+      g('dot', { count: 3 }),
+      g('dot', { count: 3 }),
     ],
     correct: 2,
   },

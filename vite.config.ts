@@ -1,10 +1,9 @@
-/// <reference types="vitest/config" />
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [svelte()],
+  plugins: [svelte() as never],
   test: {
     environment: 'node',
     include: ['tests/**/*.test.ts'],

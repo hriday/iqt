@@ -2,6 +2,7 @@
   import Intro from './components/Intro.svelte'
   import Test from './components/Test.svelte'
   import Gallery from './components/Gallery.svelte'
+  import Results from './components/Results.svelte'
   import { POOL } from './lib/puzzles'
   import { selectRun, type RunQuestion } from './lib/selection'
   import type { RunRecord } from './lib/scoring'
@@ -22,5 +23,5 @@
 {:else if screen === 'test'}
   <Test questions={run} onDone={done} />
 {:else}
-  <pre>{JSON.stringify(records, null, 2)}</pre>
+  <Results {records} onRetest={start} />
 {/if}

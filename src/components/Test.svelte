@@ -19,7 +19,7 @@
     records.push({ correct: i === q.correct, category: q.puzzle.category, difficulty: q.puzzle.difficulty, remaining })
     setTimeout(() => {
       if (index + 1 >= questions.length) return onDone(records)
-      index += 1; locked = false; selected = -1; remaining = QUESTION_SECONDS
+      remaining = QUESTION_SECONDS; index += 1; locked = false; selected = -1
     }, 350)
   }
 </script>

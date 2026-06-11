@@ -1,0 +1,10 @@
+# IQT — static Svelte build in nginx. Bound to localhost; host Caddy proxies
+# iqt.moosha.org -> localhost:8015. Build `dist/` locally, then deploy.sh.
+services:
+  web:
+    build: .
+    image: iqt:latest
+    container_name: iqt
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8015:80"

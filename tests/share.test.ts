@@ -8,5 +8,6 @@ describe('buildShareText', () => {
     expect(text).toContain('🦙 Logic Llama')
     expect(text).toContain('top 4%')
     expect(text).toContain('https://iqt.moosha.org')
+    expect(text).toContain('For entertainment only')
   })
 })

@@ -21,18 +21,22 @@ describe('rawScore', () => {
 
 describe('maxRaw / toIQ', () => {
   const run = [
-    ...Array(6).fill(rec({ difficulty: 'easy' })),
+    ...Array(3).fill(rec({ difficulty: 'easy' })),
     ...Array(6).fill(rec({ difficulty: 'medium' })),
-    ...Array(3).fill(rec({ difficulty: 'hard' })),
+    ...Array(6).fill(rec({ difficulty: 'hard' })),
   ]
-  it('max raw for the standard 6/6/3 run is 27 base + 7.5 bonus', () => {
-    expect(maxRaw(run)).toBe(34.5)
+  it('max raw for the standard 3/6/6 run is 33 base + 7.5 bonus', () => {
+    expect(maxRaw(run)).toBe(40.5)
   })
   it('maps 0 → 70 and max → 145, clamped and rounded', () => {
-    expect(toIQ(0, 34.5)).toBe(70)
-    expect(toIQ(34.5, 34.5)).toBe(145)
-    expect(toIQ(17.25, 34.5)).toBe(108)
-    expect(toIQ(99, 34.5)).toBe(145)
+    expect(toIQ(0, 40.5)).toBe(70)
+    expect(toIQ(40.5, 40.5)).toBe(145)
+    expect(toIQ(10.125, 40.5)).toBe(70) // 25% guessing floor
+    expect(toIQ(20.25, 40.5)).toBe(92) // half of max → corrected 1/3 on the curve
+    expect(toIQ(99, 40.5)).toBe(145)
+  })
+  it('chance-level play stays at the floor', () => {
+    expect(toIQ(0.22 * 40.5, 40.5)).toBe(70)
   })
 })
 

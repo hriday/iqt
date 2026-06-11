@@ -30,12 +30,12 @@ describe('selectRun', () => {
     expect(run).toHaveLength(15)
     expect(new Set(run.map((q) => q.puzzle.id)).size).toBe(15)
   })
-  it('meets quotas: per category 2 easy / 2 medium / 1 hard', () => {
+  it('meets quotas: per category 1 easy / 2 medium / 2 hard', () => {
     for (const cat of CATS) {
       const mine = run.filter((q) => q.puzzle.category === cat)
-      expect(mine.filter((q) => q.puzzle.difficulty === 'easy')).toHaveLength(2)
+      expect(mine.filter((q) => q.puzzle.difficulty === 'easy')).toHaveLength(1)
       expect(mine.filter((q) => q.puzzle.difficulty === 'medium')).toHaveLength(2)
-      expect(mine.filter((q) => q.puzzle.difficulty === 'hard')).toHaveLength(1)
+      expect(mine.filter((q) => q.puzzle.difficulty === 'hard')).toHaveLength(2)
     }
   })
   it('orders easy → medium → hard', () => {

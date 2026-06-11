@@ -4,7 +4,7 @@ export type RNG = () => number
 export interface RunQuestion { puzzle: Puzzle; options: Cell[]; correct: number }
 
 const CATEGORIES: Category[] = ['patterns', 'sequences', 'spatial']
-const QUOTA: [Difficulty, number][] = [['easy', 2], ['medium', 2], ['hard', 1]]
+const QUOTA: [Difficulty, number][] = [['easy', 1], ['medium', 2], ['hard', 2]]
 const DIFF_ORDER: Difficulty[] = ['easy', 'medium', 'hard']
 
 function shuffle<T>(items: T[], rng: RNG): T[] {

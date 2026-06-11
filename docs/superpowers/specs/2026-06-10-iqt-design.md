@@ -27,15 +27,15 @@ Dark background (`#0b0f1a` / `#111827` panels), neon cyan accent (`#22d3ee`) wit
   - **Sequences** — sequence completion (what comes next).
   - **Spatial** — mental rotation and odd-one-out.
 - All puzzles are language-free, rendered as SVG. 4–6 answer options each, exactly one correct.
-- **Pool of 45 hand-authored puzzles**: 15 per category = 5 easy / 5 medium / 5 hard. Each run draws 5 per category (mixing difficulties: per category 2 easy, 2 medium, 1 hard — 15 total: 6 easy, 6 medium, 3 hard) and orders the run easy → hard overall. Random draw makes the test replayable a few times.
+- **Pool of 45 hand-authored puzzles**: 15 per category = 5 easy / 5 medium / 5 hard. Each run draws 5 per category (mixing difficulties: per category 1 easy, 2 medium, 2 hard — 15 total: 3 easy, 6 medium, 6 hard) and orders the run easy → hard overall. Random draw makes the test replayable a few times.
 - **Puzzles are data, not artwork.** Each puzzle is a declarative spec (grid contents, shape/fill/rotation/count attributes, answer options, correct index) rendered by a small set of reusable SVG components. Authoring a puzzle = writing a spec object.
 - **Soft timer:** 35s per question. Visible countdown ring; at zero it stops awarding speed bonus but never blocks answering. Clicking an option locks the answer and advances after a brief transition. No right/wrong reveal during the test.
 
 ## Scoring
 
-- **Base points** by difficulty: easy 1, medium 2, hard 3 (max 27 base points per run with the 6/6/3 mix).
+- **Base points** by difficulty: easy 1, medium 2, hard 3 (max 33 base points per run with the 3/6/6 mix; +7.5 max speed bonus = 40.5 max raw).
 - **Speed bonus:** up to +0.5 per correct answer, linear in remaining time (full bonus at instant answer, zero at 0s left).
-- Total maps through a fixed curve to an **IQ-style number clamped to 70–145**.
+- Total maps to an **IQ-style number clamped to 70–145** via a guessing floor + power curve: fractions of max raw at or below 25% (≈ chance level on 4–5 options) map to 70; above the floor the corrected fraction is raised to a mild power (1.1) so top scores demand near-perfect runs — `iq = 70 + 75 × ((f − 0.25)/0.75)^1.1`.
 - **Percentile** from a normal-distribution lookup (mean 100, SD 15) on the displayed number.
 - **Title badges** by band, playful tone (e.g. 130+ "Pattern Prodigy", 115–129 "Logic Llama", 100–114 "Puzzle Pathfinder", below "Curious Cadet" — final names at implementation).
 - **Copy Result** writes a fun text snippet to the clipboard (score, title, percentile, URL). No server interaction.

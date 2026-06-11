@@ -22,8 +22,15 @@ export function maxRaw(records: { difficulty: Difficulty }[]): number {
   return records.reduce((sum, r) => sum + POINTS[r.difficulty] + 0.5, 0)
 }
 
+// Fraction of max below GUESS_FLOOR (≈ chance level on 4–5 options) maps to 70;
+// a mild power curve above it makes top scores demand near-perfect runs.
+const GUESS_FLOOR = 0.25
+const CURVE = 1.1
+
 export function toIQ(raw: number, max: number): number {
-  const iq = 70 + 75 * (raw / max)
+  const f = raw / max
+  const corrected = Math.max(0, (f - GUESS_FLOOR) / (1 - GUESS_FLOOR))
+  const iq = 70 + 75 * Math.pow(corrected, CURVE)
   return Math.round(Math.min(145, Math.max(70, iq)))
 }
 

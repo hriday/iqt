@@ -333,4 +333,123 @@ export const SEQUENCES: Puzzle[] = [
     ],
     correct: 0,
   },
+
+  // ── seq-x1 ───────────────────────────────────────────────────────────────
+  // Rule: alternating operations +3, −1 on the dot count: 1, 4, 3, 6, 5 →
+  // next (+3) = 8. The zig-zag defeats any single-step rule.
+  {
+    kind: 'sequence',
+    id: 'seq-x1',
+    category: 'sequences',
+    difficulty: 'expert',
+    sequence: [
+      g('dot', { count: 1 }), g('dot', { count: 4 }), g('dot', { count: 3 }),
+      g('dot', { count: 6 }), g('dot', { count: 5 }),
+    ],
+    options: [
+      g('dot', { count: 8 }), // correct
+      g('dot', { count: 4 }), // continues the −1 step instead (copy of shown cell)
+      g('dot', { count: 7 }), // +2 averaging guess
+      g('dot', { count: 6 }), // one step back (copy of shown cell)
+    ],
+    correct: 0,
+  },
+
+  // ── seq-x2 ───────────────────────────────────────────────────────────────
+  // Rule: three simultaneous rules on a flag — rotation +90°/step, fill cycles
+  // solid → outline → hatch, scale shrinks −0.15/step:
+  // (0°, solid, 1.0), (90°, outline, 0.85), (180°, hatch, 0.7),
+  // (270°, solid, 0.55) → next = (360°≡0°, outline, 0.4).
+  {
+    kind: 'sequence',
+    id: 'seq-x2',
+    category: 'sequences',
+    difficulty: 'expert',
+    sequence: [
+      g('flag', { rotation: 0, fill: 'solid', scale: 1 }),
+      g('flag', { rotation: 90, fill: 'outline', scale: 0.85 }),
+      g('flag', { rotation: 180, fill: 'hatch', scale: 0.7 }),
+      g('flag', { rotation: 270, fill: 'solid', scale: 0.55 }),
+    ],
+    options: [
+      g('flag', { rotation: 0, fill: 'outline', scale: 0.4 }),  // correct
+      g('flag', { rotation: 0, fill: 'outline', scale: 0.55 }), // scale one step back
+      g('flag', { rotation: 0, fill: 'hatch', scale: 0.4 }),    // fill cycle off by one
+      g('flag', { rotation: 90, fill: 'outline', scale: 0.4 }), // rotation one step off
+    ],
+    correct: 0,
+  },
+
+  // ── seq-x3 ───────────────────────────────────────────────────────────────
+  // Rule: three interleaved subsequences with period 3 — squares growing
+  // (0.5, 0.75, …), dots +2 (2, 4, …), arrows +90° (0°, 90°, …). Shown six:
+  // square 0.5, 2 dots, arrow 0°, square 0.75, 4 dots, arrow 90° → position 7
+  // returns to the square thread = square 1.0.
+  {
+    kind: 'sequence',
+    id: 'seq-x3',
+    category: 'sequences',
+    difficulty: 'expert',
+    sequence: [
+      g('square', { scale: 0.5 }), g('dot', { count: 2 }), g('arrow', { rotation: 0 }),
+      g('square', { scale: 0.75 }), g('dot', { count: 4 }), g('arrow', { rotation: 90 }),
+    ],
+    options: [
+      g('square', { scale: 1 }),     // correct
+      g('dot', { count: 6 }),        // continues the wrong (dot) thread
+      g('arrow', { rotation: 180 }), // continues the wrong (arrow) thread
+      g('square', { scale: 0.75 }),  // one square step back (copy of shown cell)
+    ],
+    correct: 0,
+  },
+
+  // ── seq-x4 ───────────────────────────────────────────────────────────────
+  // Rule: rotation +45°/step AND mirror toggles every step:
+  // (0°, plain), (45°, mirrored), (90°, plain), (135°, mirrored) →
+  // next = (180°, plain). Spotting the mirror on a 45°-tilted flag is the
+  // hard part; the flag is chiral so mirroring is never a rotation.
+  {
+    kind: 'sequence',
+    id: 'seq-x4',
+    category: 'sequences',
+    difficulty: 'expert',
+    sequence: [
+      g('flag', { rotation: 0 }),
+      g('flag', { rotation: 45, mirror: true }),
+      g('flag', { rotation: 90 }),
+      g('flag', { rotation: 135, mirror: true }),
+    ],
+    options: [
+      g('flag', { rotation: 180 }),               // correct
+      g('flag', { rotation: 180, mirror: true }), // right rotation, mirror parity off
+      g('flag', { rotation: 135 }),               // rotation one back, parity flipped
+      g('flag', { rotation: 225 }),               // one step too far
+    ],
+    correct: 0,
+  },
+
+  // ── seq-x5 ───────────────────────────────────────────────────────────────
+  // Rule: two coupled counts moving in opposite directions — outer outline
+  // polygon loses a side per step (hexagon 6 → pentagon 5 → square 4) while
+  // the dots inside gain one (1, 2, 3) → next = triangle with 4 dots.
+  // Geometry: at dot scale 0.4 the 4-dot corners sit ~7 units from center,
+  // inside the triangle outline (nearest edge ≥ 11 units there).
+  {
+    kind: 'sequence',
+    id: 'seq-x5',
+    category: 'sequences',
+    difficulty: 'expert',
+    sequence: [
+      [{ shape: 'hexagon', fill: 'outline' }, { shape: 'dot', count: 1, scale: 0.4 }],
+      [{ shape: 'pentagon', fill: 'outline' }, { shape: 'dot', count: 2, scale: 0.4 }],
+      [{ shape: 'square', fill: 'outline' }, { shape: 'dot', count: 3, scale: 0.4 }],
+    ],
+    options: [
+      [{ shape: 'triangle', fill: 'outline' }, { shape: 'dot', count: 4, scale: 0.4 }], // correct
+      [{ shape: 'triangle', fill: 'outline' }, { shape: 'dot', count: 3, scale: 0.4 }], // shape right, dots one back
+      [{ shape: 'square', fill: 'outline' }, { shape: 'dot', count: 4, scale: 0.4 }],   // dots right, shape one back
+      [{ shape: 'triangle', fill: 'outline' }, { shape: 'dot', count: 5, scale: 0.4 }], // dots one too many
+    ],
+    correct: 0,
+  },
 ]

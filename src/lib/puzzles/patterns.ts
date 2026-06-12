@@ -360,4 +360,143 @@ export const PATTERNS: Puzzle[] = [
     ],
     correct: 0,
   },
+
+  // ── pat-x1 ───────────────────────────────────────────────────────────────
+  // Rule: three simultaneous rules — shapes (circle/square/triangle) and fills
+  // (solid/outline/hatch) form orthogonal latin squares (every shape-fill pair
+  // occurs once), AND scale shrinks by column 1.0 / 0.75 / 0.5.
+  //   circle-solid-1.0    square-outline-0.75  triangle-hatch-0.5
+  //   triangle-outline-1.0 circle-hatch-0.75   square-solid-0.5
+  //   square-hatch-1.0    triangle-solid-0.75  ?
+  // Row 2 / col 2 lack circle + outline; col 2 scale is 0.5 → circle outline 0.5.
+  {
+    kind: 'matrix',
+    id: 'pat-x1',
+    category: 'patterns',
+    difficulty: 'expert',
+    grid: [
+      g('circle', { fill: 'solid', scale: 1 }), g('square', { fill: 'outline', scale: 0.75 }), g('triangle', { fill: 'hatch', scale: 0.5 }),
+      g('triangle', { fill: 'outline', scale: 1 }), g('circle', { fill: 'hatch', scale: 0.75 }), g('square', { fill: 'solid', scale: 0.5 }),
+      g('square', { fill: 'hatch', scale: 1 }), g('triangle', { fill: 'solid', scale: 0.75 }),
+    ],
+    options: [
+      g('circle', { fill: 'outline', scale: 0.5 }),  // correct
+      g('circle', { fill: 'outline', scale: 0.75 }), // right shape & fill, wrong scale
+      g('circle', { fill: 'hatch', scale: 0.5 }),    // right shape & scale, fill already in column
+      g('square', { fill: 'outline', scale: 0.5 }),  // wrong shape, right fill & scale
+    ],
+    correct: 0,
+  },
+
+  // ── pat-x2 ───────────────────────────────────────────────────────────────
+  // Rule: dot count in col 2 = col 0 + col 1 (row-wise addition):
+  //   1+2=3 / 2+3=5 / 3+4=? → 7. Row 0 masquerades as a +1 progression and
+  //   col 2 (3, 5, 7) as +2 — both reward the addition rule, but neither
+  //   shortcut survives the distractors that break them.
+  {
+    kind: 'matrix',
+    id: 'pat-x2',
+    category: 'patterns',
+    difficulty: 'expert',
+    grid: [
+      g('dot', { count: 1 }), g('dot', { count: 2 }), g('dot', { count: 3 }),
+      g('dot', { count: 2 }), g('dot', { count: 3 }), g('dot', { count: 5 }),
+      g('dot', { count: 3 }), g('dot', { count: 4 }),
+    ],
+    options: [
+      g('dot', { count: 7 }), // correct
+      g('dot', { count: 5 }), // row read as +1 (copy of grid cell)
+      g('dot', { count: 6 }), // +2 from the last shown cell
+      g('dot', { count: 8 }), // overshoot
+    ],
+    correct: 0,
+  },
+
+  // ── pat-x3 ───────────────────────────────────────────────────────────────
+  // Rule: symmetric difference (XOR) — col 2 shows exactly the elements that
+  // appear in col 0 or col 1 but not both. Elements: square outline frame (S),
+  // circle outline 0.65 (C), center dot 0.35 (D).
+  //   {S}     {C,D}  → {S,C,D}
+  //   {S,C}   {S,D}  → {C,D}
+  //   {S,C,D} {C}    → ? = {S,D}
+  // Union says {S,C,D}, intersection says {C} — only XOR fits all rows.
+  {
+    kind: 'matrix',
+    id: 'pat-x3',
+    category: 'patterns',
+    difficulty: 'expert',
+    grid: [
+      g('square', { fill: 'outline' }),
+      [{ shape: 'circle', fill: 'outline', scale: 0.65 }, { shape: 'dot', count: 1, scale: 0.35 }],
+      [{ shape: 'square', fill: 'outline' }, { shape: 'circle', fill: 'outline', scale: 0.65 }, { shape: 'dot', count: 1, scale: 0.35 }],
+      [{ shape: 'square', fill: 'outline' }, { shape: 'circle', fill: 'outline', scale: 0.65 }],
+      [{ shape: 'square', fill: 'outline' }, { shape: 'dot', count: 1, scale: 0.35 }],
+      [{ shape: 'circle', fill: 'outline', scale: 0.65 }, { shape: 'dot', count: 1, scale: 0.35 }],
+      [{ shape: 'square', fill: 'outline' }, { shape: 'circle', fill: 'outline', scale: 0.65 }, { shape: 'dot', count: 1, scale: 0.35 }],
+      g('circle', { fill: 'outline', scale: 0.65 }),
+    ],
+    options: [
+      [{ shape: 'square', fill: 'outline' }, { shape: 'dot', count: 1, scale: 0.35 }],   // correct: XOR
+      [{ shape: 'square', fill: 'outline' }, { shape: 'circle', fill: 'outline', scale: 0.65 }, { shape: 'dot', count: 1, scale: 0.35 }], // union (copy of grid cell)
+      g('dot', { count: 1, scale: 0.35 }),                                               // dot only
+      [{ shape: 'square', fill: 'outline' }, { shape: 'circle', fill: 'outline', scale: 0.65 }], // copy of grid cell
+    ],
+    correct: 0,
+  },
+
+  // ── pat-x4 ───────────────────────────────────────────────────────────────
+  // Rule: half-fill direction forms a latin square (left/top/right), shape is
+  // fixed per row (square/circle/hexagon):
+  //   half-left  half-top   half-right
+  //   half-top   half-right half-left
+  //   half-right half-left  ?          → half-top, on the row shape hexagon.
+  {
+    kind: 'matrix',
+    id: 'pat-x4',
+    category: 'patterns',
+    difficulty: 'expert',
+    grid: [
+      g('square', { fill: 'half-left' }), g('square', { fill: 'half-top' }), g('square', { fill: 'half-right' }),
+      g('circle', { fill: 'half-top' }), g('circle', { fill: 'half-right' }), g('circle', { fill: 'half-left' }),
+      g('hexagon', { fill: 'half-right' }), g('hexagon', { fill: 'half-left' }),
+    ],
+    options: [
+      g('hexagon', { fill: 'half-top' }),    // correct
+      g('hexagon', { fill: 'half-bottom' }), // right shape, fill flipped
+      g('hexagon', { fill: 'half-left' }),   // right shape, fill already in row (copy of grid cell)
+      g('circle', { fill: 'half-top' }),     // wrong shape, right fill (copy of grid cell)
+    ],
+    correct: 0,
+  },
+
+  // ── pat-x5 ───────────────────────────────────────────────────────────────
+  // Rule: two ORTHOGONAL latin squares in layered cells — outline frame
+  // (circle/square/hexagon) and inner dot count (2/3/4); every frame-count
+  // pair occurs exactly once, so neither attribute predicts the other:
+  //   circle-2  square-3  hexagon-4
+  //   hexagon-3 circle-4  square-2
+  //   square-4  hexagon-2 ?          → circle frame with 3 dots.
+  {
+    kind: 'matrix',
+    id: 'pat-x5',
+    category: 'patterns',
+    difficulty: 'expert',
+    grid: [
+      [{ shape: 'circle', fill: 'outline' }, { shape: 'dot', count: 2, scale: 0.45 }],
+      [{ shape: 'square', fill: 'outline' }, { shape: 'dot', count: 3, scale: 0.45 }],
+      [{ shape: 'hexagon', fill: 'outline' }, { shape: 'dot', count: 4, scale: 0.45 }],
+      [{ shape: 'hexagon', fill: 'outline' }, { shape: 'dot', count: 3, scale: 0.45 }],
+      [{ shape: 'circle', fill: 'outline' }, { shape: 'dot', count: 4, scale: 0.45 }],
+      [{ shape: 'square', fill: 'outline' }, { shape: 'dot', count: 2, scale: 0.45 }],
+      [{ shape: 'square', fill: 'outline' }, { shape: 'dot', count: 4, scale: 0.45 }],
+      [{ shape: 'hexagon', fill: 'outline' }, { shape: 'dot', count: 2, scale: 0.45 }],
+    ],
+    options: [
+      [{ shape: 'circle', fill: 'outline' }, { shape: 'dot', count: 3, scale: 0.45 }],  // correct
+      [{ shape: 'circle', fill: 'outline' }, { shape: 'dot', count: 2, scale: 0.45 }],  // right frame, count already in column (copy of grid cell)
+      [{ shape: 'hexagon', fill: 'outline' }, { shape: 'dot', count: 3, scale: 0.45 }], // frame already in row & column (copy of grid cell)
+      [{ shape: 'circle', fill: 'outline' }, { shape: 'dot', count: 4, scale: 0.45 }],  // right frame, count already in row (copy of grid cell)
+    ],
+    correct: 0,
+  },
 ]

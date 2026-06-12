@@ -5,11 +5,11 @@
 <div class="panel">
   <div class="label">PATTERN COGNITION ASSESSMENT</div>
   <h1>IQT<span class="cursor">_</span></h1>
-  <p class="sub">15 visual puzzles · ~6 minutes · no words, just patterns</p>
+  <p class="sub">20 visual puzzles · ~8 minutes · no words, just patterns</p>
   <ul>
-    <li>Each question has a soft 35s timer — fast answers earn a small bonus, but it never cuts you off.</li>
+    <li>Each question has a soft 35s timer — answer within 30s for a speed bonus; slower costs half a point, but it never cuts you off.</li>
     <li>Answers lock when you click. No going back.</li>
-    <li>Three categories: patterns, sequences, spatial.</li>
+    <li>Four categories: patterns, sequences, spatial, analogies.</li>
   </ul>
   <button class="primary big" onclick={onStart}>▶ BEGIN ASSESSMENT</button>
   <p class="disclaimer">For entertainment only — this is a game, not a medical or psychometric instrument.</p>

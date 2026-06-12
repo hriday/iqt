@@ -1,7 +1,10 @@
 import type { Category, Difficulty } from './types'
 
 export const QUESTION_SECONDS = 35
-const POINTS: Record<Difficulty, number> = { easy: 1, medium: 2, hard: 3 }
+export const PENALTY_AFTER_SECONDS = 30 // answers slower than this lose LATE_PENALTY
+export const LATE_PENALTY = 0.5
+const PENALTY_REMAINING = QUESTION_SECONDS - PENALTY_AFTER_SECONDS
+const POINTS: Record<Difficulty, number> = { easy: 1, medium: 2, hard: 3, expert: 4 }
 
 export interface RunRecord {
   correct: boolean
@@ -10,12 +13,16 @@ export interface RunRecord {
   remaining: number // seconds left when answered
 }
 
+// Speed bonus tapers from +0.5 (instant) to 0 at the 30s mark; past it every
+// answer — right or wrong — pays the flat late penalty. Total clamps at 0.
 export function rawScore(records: { correct: boolean; difficulty: Difficulty; remaining: number }[]): number {
-  return records.reduce((sum, r) => {
-    if (!r.correct) return sum
-    const bonus = 0.5 * Math.max(0, Math.min(1, r.remaining / QUESTION_SECONDS))
-    return sum + POINTS[r.difficulty] + bonus
+  const sum = records.reduce((sum, r) => {
+    const penalty = r.remaining < PENALTY_REMAINING ? LATE_PENALTY : 0
+    if (!r.correct) return sum - penalty
+    const bonus = 0.5 * Math.max(0, Math.min(1, (r.remaining - PENALTY_REMAINING) / PENALTY_AFTER_SECONDS))
+    return sum + POINTS[r.difficulty] + bonus - penalty
   }, 0)
+  return Math.max(0, sum)
 }
 
 export function maxRaw(records: { difficulty: Difficulty }[]): number {

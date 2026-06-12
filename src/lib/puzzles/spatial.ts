@@ -291,4 +291,109 @@ export const SPATIAL: Puzzle[] = [
     ],
     correct: 2,
   },
+
+  // ── spa-x1 ───────────────────────────────────────────────────────────────
+  // Rule: which is the base flag (half-top fill) rotated? Correct = rotation
+  // 225. Five options: three mirrored (including one at the correct angle and
+  // one near it), plus a fill-flipped twin — half-bottom at 225 is NOT a
+  // rotation of half-top because the fill clip rotates with the shape, and
+  // the flag has no 180° symmetry to absorb the difference.
+  {
+    kind: 'rotation',
+    id: 'spa-x1',
+    category: 'spatial',
+    difficulty: 'expert',
+    base: g('flag', { fill: 'half-top' }),
+    options: [
+      g('flag', { fill: 'half-top', rotation: 225 }),                // correct
+      g('flag', { fill: 'half-top', mirror: true, rotation: 225 }),  // mirrored at correct angle
+      g('flag', { fill: 'half-top', mirror: true, rotation: 45 }),   // mirrored
+      g('flag', { fill: 'half-bottom', rotation: 225 }),             // fill flipped — not a rotation
+      g('flag', { fill: 'half-top', mirror: true, rotation: 315 }),  // mirrored near correct angle
+    ],
+    correct: 0,
+  },
+
+  // ── spa-x2 ───────────────────────────────────────────────────────────────
+  // Rule: five L's with half-left fill — four are pure rotations of one
+  // another at mixed axis/diagonal angles (0/45/135/225), one is mirrored
+  // (at 315). The half-fill travels with the shape, camouflaging the
+  // chirality check at every tilt.
+  {
+    kind: 'odd-one-out',
+    id: 'spa-x2',
+    category: 'spatial',
+    difficulty: 'expert',
+    options: [
+      g('L', { fill: 'half-left', rotation: 0 }),
+      g('L', { fill: 'half-left', rotation: 45 }),
+      g('L', { fill: 'half-left', mirror: true, rotation: 315 }), // odd: mirrored
+      g('L', { fill: 'half-left', rotation: 135 }),
+      g('L', { fill: 'half-left', rotation: 225 }),
+    ],
+    correct: 2,
+  },
+
+  // ── spa-x3 ───────────────────────────────────────────────────────────────
+  // Rule: each cell layers an L outline with a solid arrow (scale 0.5). In
+  // four cells both glyphs share one rotation — the cells are rigid rotations
+  // of the same composite (at 0/90/225/315). In the odd cell the arrow is
+  // turned +90° relative to its L: the parts are right, the relation is wrong.
+  {
+    kind: 'odd-one-out',
+    id: 'spa-x3',
+    category: 'spatial',
+    difficulty: 'expert',
+    options: [
+      [{ shape: 'L', fill: 'outline', rotation: 0 }, { shape: 'arrow', fill: 'solid', scale: 0.5, rotation: 0 }],
+      [{ shape: 'L', fill: 'outline', rotation: 90 }, { shape: 'arrow', fill: 'solid', scale: 0.5, rotation: 90 }],
+      [{ shape: 'L', fill: 'outline', rotation: 135 }, { shape: 'arrow', fill: 'solid', scale: 0.5, rotation: 225 }], // odd: arrow misaligned
+      [{ shape: 'L', fill: 'outline', rotation: 225 }, { shape: 'arrow', fill: 'solid', scale: 0.5, rotation: 225 }],
+      [{ shape: 'L', fill: 'outline', rotation: 315 }, { shape: 'arrow', fill: 'solid', scale: 0.5, rotation: 315 }],
+    ],
+    correct: 2,
+  },
+
+  // ── spa-x4 ───────────────────────────────────────────────────────────────
+  // Rule: which is the base L (half-top fill) rotated? Correct = rotation 315.
+  // Six options — four mirrored at neighbouring angles plus a fill-flipped
+  // twin at the correct angle (half-bottom at 315 ≠ any rotation of half-top:
+  // that would need the L to map to itself under a 180° turn, which it
+  // doesn't).
+  {
+    kind: 'rotation',
+    id: 'spa-x4',
+    category: 'spatial',
+    difficulty: 'expert',
+    base: g('L', { fill: 'half-top' }),
+    options: [
+      g('L', { fill: 'half-top', rotation: 315 }),               // correct
+      g('L', { fill: 'half-top', mirror: true, rotation: 315 }), // mirrored at correct angle
+      g('L', { fill: 'half-top', mirror: true, rotation: 270 }), // mirrored, neighbour angle
+      g('L', { fill: 'half-top', mirror: true, rotation: 0 }),   // mirrored at base angle
+      g('L', { fill: 'half-bottom', rotation: 315 }),            // fill flipped — not a rotation
+      g('L', { fill: 'half-top', mirror: true, rotation: 45 }),  // mirrored, neighbour angle
+    ],
+    correct: 0,
+  },
+
+  // ── spa-x5 ───────────────────────────────────────────────────────────────
+  // Rule: each cell is an arrow outline with a small solid arrow inside. In
+  // four cells the inner arrow points OPPOSITE the outer (rotated +180°) —
+  // those cells are rigid rotations of one composite (at 0/45/180/315). In
+  // the odd cell (90°) the inner arrow points the SAME way as the outer.
+  {
+    kind: 'odd-one-out',
+    id: 'spa-x5',
+    category: 'spatial',
+    difficulty: 'expert',
+    options: [
+      [{ shape: 'arrow', fill: 'outline', rotation: 0 }, { shape: 'arrow', fill: 'solid', scale: 0.45, rotation: 180 }],
+      [{ shape: 'arrow', fill: 'outline', rotation: 45 }, { shape: 'arrow', fill: 'solid', scale: 0.45, rotation: 225 }],
+      [{ shape: 'arrow', fill: 'outline', rotation: 90 }, { shape: 'arrow', fill: 'solid', scale: 0.45, rotation: 90 }], // odd: aligned, not opposed
+      [{ shape: 'arrow', fill: 'outline', rotation: 180 }, { shape: 'arrow', fill: 'solid', scale: 0.45, rotation: 0 }],
+      [{ shape: 'arrow', fill: 'outline', rotation: 315 }, { shape: 'arrow', fill: 'solid', scale: 0.45, rotation: 135 }],
+    ],
+    correct: 2,
+  },
 ]

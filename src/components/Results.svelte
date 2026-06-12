@@ -13,7 +13,7 @@
   const top = Math.max(1, 100 - pct)
   const title = titleFor(iq)
   const subject = 1000 + Math.floor(Math.random() * 9000)
-  const cats = (['patterns', 'sequences', 'spatial'] as const).map((c) => ({
+  const cats = (['patterns', 'sequences', 'spatial', 'analogies'] as const).map((c) => ({
     name: c.toUpperCase(),
     right: records.filter((r) => r.category === c && r.correct).length,
     total: records.filter((r) => r.category === c).length,
@@ -66,8 +66,8 @@
   .ptitle { text-align: left; margin-bottom: 6px; }
   .track { height: 8px; background: var(--border); border-radius: 99px; margin-bottom: 20px; }
   .fill { height: 8px; border-radius: 99px; background: linear-gradient(90deg, var(--accent), var(--accent2)); box-shadow: 0 0 10px var(--glow); }
-  .cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
-  .cat { background: var(--cell); border: 1px solid var(--border2); border-radius: 8px; padding: 10px 4px; }
+  .cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
+  .cat { background: var(--cell); border: 1px solid var(--border2); border-radius: 8px; padding: 10px 4px; overflow: hidden; }
   .n { font-size: 18px; color: var(--ink); margin-top: 4px; }
   .actions { display: flex; gap: 8px; }
   .actions button { flex: 1; padding: 12px 0; font-size: 12px; }

@@ -11,8 +11,8 @@ function mulberry32(seed: number) {
   }
 }
 
-const CATS: Category[] = ['patterns', 'sequences', 'spatial']
-const DIFFS: Difficulty[] = ['easy', 'medium', 'hard']
+const CATS: Category[] = ['patterns', 'sequences', 'spatial', 'analogies']
+const DIFFS: Difficulty[] = ['easy', 'medium', 'hard', 'expert']
 const fakePool: Puzzle[] = CATS.flatMap((category) =>
   DIFFS.flatMap((difficulty) =>
     Array.from({ length: 5 }, (_, i): Puzzle => ({
@@ -26,19 +26,20 @@ const fakePool: Puzzle[] = CATS.flatMap((category) =>
 describe('selectRun', () => {
   const run = selectRun(fakePool, mulberry32(42))
 
-  it('draws 15 unique questions', () => {
-    expect(run).toHaveLength(15)
-    expect(new Set(run.map((q) => q.puzzle.id)).size).toBe(15)
+  it('draws 20 unique questions', () => {
+    expect(run).toHaveLength(20)
+    expect(new Set(run.map((q) => q.puzzle.id)).size).toBe(20)
   })
-  it('meets quotas: per category 1 easy / 2 medium / 2 hard', () => {
+  it('meets quotas: per category 1 easy / 1 medium / 1 hard / 2 expert', () => {
     for (const cat of CATS) {
       const mine = run.filter((q) => q.puzzle.category === cat)
       expect(mine.filter((q) => q.puzzle.difficulty === 'easy')).toHaveLength(1)
-      expect(mine.filter((q) => q.puzzle.difficulty === 'medium')).toHaveLength(2)
-      expect(mine.filter((q) => q.puzzle.difficulty === 'hard')).toHaveLength(2)
+      expect(mine.filter((q) => q.puzzle.difficulty === 'medium')).toHaveLength(1)
+      expect(mine.filter((q) => q.puzzle.difficulty === 'hard')).toHaveLength(1)
+      expect(mine.filter((q) => q.puzzle.difficulty === 'expert')).toHaveLength(2)
     }
   })
-  it('orders easy → medium → hard', () => {
+  it('orders easy → medium → hard → expert', () => {
     const order = run.map((q) => DIFFS.indexOf(q.puzzle.difficulty))
     expect(order).toEqual([...order].sort((a, b) => a - b))
   })

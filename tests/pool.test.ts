@@ -25,10 +25,10 @@ function canonical(cell: Cell): string {
 }
 
 describe('puzzle pool', () => {
-  it('has 45 puzzles: 5 per category × difficulty', () => {
-    expect(POOL).toHaveLength(45)
-    for (const category of ['patterns', 'sequences', 'spatial'] as const)
-      for (const difficulty of ['easy', 'medium', 'hard'] as const)
+  it('has 80 puzzles: 5 per category × difficulty', () => {
+    expect(POOL).toHaveLength(80)
+    for (const category of ['patterns', 'sequences', 'spatial', 'analogies'] as const)
+      for (const difficulty of ['easy', 'medium', 'hard', 'expert'] as const)
         expect(POOL.filter((p) => p.category === category && p.difficulty === difficulty)).toHaveLength(5)
   })
   it('has unique ids', () => {
@@ -42,7 +42,7 @@ describe('puzzle pool', () => {
       expect(p.correct, p.id).toBeLessThan(p.options.length)
 
       const canonicals = p.options.map(canonical)
-      if (p.kind === 'matrix' || p.kind === 'sequence' || p.kind === 'rotation') {
+      if (p.kind === 'matrix' || p.kind === 'sequence' || p.kind === 'rotation' || p.kind === 'analogy') {
         // All options must be canonically unique
         expect(
           new Set(canonicals).size,
@@ -63,6 +63,7 @@ describe('puzzle pool', () => {
 
       if (p.kind === 'matrix') expect(p.grid, p.id).toHaveLength(8)
       if (p.kind === 'sequence') expect(p.sequence.length, p.id).toBeGreaterThanOrEqual(3)
+      if (p.kind === 'analogy') expect(p.pair, p.id).toHaveLength(3)
     }
   })
 })

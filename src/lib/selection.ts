@@ -3,9 +3,9 @@ import type { Puzzle, Category, Difficulty, Cell } from './types'
 export type RNG = () => number
 export interface RunQuestion { puzzle: Puzzle; options: Cell[]; correct: number }
 
-const CATEGORIES: Category[] = ['patterns', 'sequences', 'spatial']
-const QUOTA: [Difficulty, number][] = [['easy', 1], ['medium', 2], ['hard', 2]]
-const DIFF_ORDER: Difficulty[] = ['easy', 'medium', 'hard']
+const CATEGORIES: Category[] = ['patterns', 'sequences', 'spatial', 'analogies']
+const QUOTA: [Difficulty, number][] = [['easy', 1], ['medium', 1], ['hard', 1], ['expert', 2]]
+const DIFF_ORDER: Difficulty[] = ['easy', 'medium', 'hard', 'expert']
 
 function shuffle<T>(items: T[], rng: RNG): T[] {
   const a = [...items]

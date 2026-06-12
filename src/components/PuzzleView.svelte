@@ -12,6 +12,7 @@
     sequence: 'What comes next?',
     'odd-one-out': 'Which one doesn’t belong?',
     rotation: 'Which is the same shape, rotated — not mirrored?',
+    analogy: 'Complete the analogy',
   }
   const LETTERS = 'ABCDEF'
 </script>
@@ -31,6 +32,16 @@
     </div>
   {:else if question.puzzle.kind === 'rotation'}
     <div class="row"><div class="cell base"><GlyphSvg cell={question.puzzle.base} size={88} /></div></div>
+  {:else if question.puzzle.kind === 'analogy'}
+    <div class="row">
+      <div class="cell"><GlyphSvg cell={question.puzzle.pair[0]} size={56} /></div>
+      <span class="sep">→</span>
+      <div class="cell"><GlyphSvg cell={question.puzzle.pair[1]} size={56} /></div>
+      <span class="sep">∷</span>
+      <div class="cell"><GlyphSvg cell={question.puzzle.pair[2]} size={56} /></div>
+      <span class="sep">→</span>
+      <div class="cell missing">?</div>
+    </div>
   {/if}
 
   <div class="opts">
@@ -55,6 +66,7 @@
     background: var(--cell); border: 1px solid var(--border2); border-radius: 8px;
   }
   .cell.base { padding: 8px; }
+  .sep { align-self: center; color: var(--dim); font-size: 18px; }
   .missing { border: 1px dashed var(--accent); color: var(--accent); font-size: 22px; background: rgba(34, 211, 238, 0.05); }
   .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(86px, 1fr)); gap: 8px; }
   .opt {

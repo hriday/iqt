@@ -1,5 +1,5 @@
-export type Category = 'patterns' | 'sequences' | 'spatial'
-export type Difficulty = 'easy' | 'medium' | 'hard'
+export type Category = 'patterns' | 'sequences' | 'spatial' | 'analogies'
+export type Difficulty = 'easy' | 'medium' | 'hard' | 'expert'
 export type Shape =
   | 'circle' | 'square' | 'triangle' | 'diamond' | 'pentagon' | 'hexagon'
   | 'star' | 'cross' | 'arrow' | 'dot' | 'L' | 'flag'
@@ -26,4 +26,5 @@ export interface MatrixPuzzle extends PuzzleBase { kind: 'matrix'; grid: Cell[] 
 export interface SequencePuzzle extends PuzzleBase { kind: 'sequence'; sequence: Cell[] } // 3–4 cells, next is missing
 export interface OddOneOutPuzzle extends PuzzleBase { kind: 'odd-one-out' }              // options ARE the items; correct = the odd one
 export interface RotationPuzzle extends PuzzleBase { kind: 'rotation'; base: Cell }      // pick rotation of base (distractors mirrored)
-export type Puzzle = MatrixPuzzle | SequencePuzzle | OddOneOutPuzzle | RotationPuzzle
+export interface AnalogyPuzzle extends PuzzleBase { kind: 'analogy'; pair: [Cell, Cell, Cell] } // A → B ∷ C → ?
+export type Puzzle = MatrixPuzzle | SequencePuzzle | OddOneOutPuzzle | RotationPuzzle | AnalogyPuzzle
